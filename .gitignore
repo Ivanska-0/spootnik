@@ -1,3 +1,8 @@
+# User
+checkpoint/
+models/
+gpt2_gentext_*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
