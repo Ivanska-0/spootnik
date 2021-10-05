@@ -1,8 +1,6 @@
-# User
-checkpoint/
-models/
-gpt2_gentext_*
-logs/
+# Others by user
+app/thesessions/*
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
