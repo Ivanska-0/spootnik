@@ -3,6 +3,7 @@ checkpoint/
 models/
 gpt2_gentext_*
 logs/
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
