@@ -10,7 +10,9 @@ import os
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-with open("gpt-text-parsed.txt", "r") as f:
+PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)), "gpt-text-parsed.txt")
+
+with open(PATH, "r") as f:
     tweets = f.readlines()
     f.close()
 
