@@ -22,9 +22,12 @@ def start(update, context):
 
 
 def echo(update, context):
-    if re.search(
-            r"(([A,a]rturo)+)|((([R,r]everte)d*)+)",
-            update.message.text) \
+    if update.message.chat.type == "private":
+        utils.send_message(update, tweets[randrange(8000)])
+
+    elif re.search(
+                r"(([A,a]((rturo)|(RTURO))))|((([R,r]((everte)|(EVERTE)))[D,d]{0,1}))",
+                update.message.text) \
             or randrange(50) == 1:
         utils.reply_message(update, tweets[randrange(8000)])
 

@@ -15,3 +15,7 @@ def reply_message(update, msg):
         "&text=" + msg + \
         "&reply_to_message_id=" + str(msg_id)
     requests.get(req)
+
+
+def send_message(update, msg):
+    update.message.reply_text(msg)
