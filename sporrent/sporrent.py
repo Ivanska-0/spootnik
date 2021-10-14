@@ -67,35 +67,34 @@ def start_download(name: str):
 def main():
     print("Starting process")
 
-    # Set up term handler
-    # term = Term()
-
     # For the first round
     first = True
     try:
-        # while not term.term:
         while True:
             # If first round, look for files in .downloading
             if first:
                 dir = DOWNLOADING
             else:
                 dir = TORRENTS
-            # Walk thru files in the selected dir
-            _, _, files = next(os.walk(dir))
-            for f in files:
-                if f.endswith(".torrent"):
-                    # If it was first round, we don't have to move anything
-                    if not first:
-                        # Move the torrents to the .downloading folder
-                        os.rename(TORRENTS + f, DOWNLOADING + f)
-                    
-                    # Launch a thread to start download the file
-                    print("Launching: {}".format(f))
-                    th = threading.Thread(target=start_download,
-                                     args=(f,),
-                                     daemon=True)
-                    th.start()
-            
+            # Walk thru files in the selected dir if exist
+            try:
+                _, _, files = next(os.walk(dir))
+                for f in files:
+                    if f.endswith(".torrent"):
+                        # If it was first round, we don't have to move anything
+                        if not first:
+                            # Move the torrents to the .downloading folder
+                            os.rename(TORRENTS + f, DOWNLOADING + f)
+                        
+                        # Launch a thread to start download the file
+                        print("Launching: {}".format(f))
+                        th = threading.Thread(target=start_download,
+                                        args=(f,),
+                                        daemon=True)
+                        th.start()
+            except StopIteration:
+                print("No files found in {}".format(dir))
+
             # If it was first round, low the flag
             if first:
                 first = False
@@ -108,16 +107,6 @@ def main():
         print(e)
         return
 
-"""
-class Term:
-    term = False
-    def __init__(self):
-        signal.signal(signal.SIGINT, self.end)
-        signal.signal(signal.SIGTERM, self.end)
-
-    def end(self):
-        self.term = True
-"""
 
 if __name__ == "__main__":
     main()
