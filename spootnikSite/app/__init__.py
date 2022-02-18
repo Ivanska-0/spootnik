@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, session
+from flask import Flask
+from flask_session import Session
 import os
 import sys
 from dotenv import load_dotenv
