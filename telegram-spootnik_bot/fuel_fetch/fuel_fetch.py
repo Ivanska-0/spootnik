@@ -1,6 +1,7 @@
 import os
 import pathlib
 import time
+import logging
 import datetime
 from dotenv import load_dotenv
 import pandas as pd
@@ -22,6 +23,11 @@ MINLONG = os.getenv("MINLONG")
 URL = "https://www.komparing.com/es/gasolina/include/process-xml_maxLat{}_minLat{}_maxLong-{}_minLong-{}_zoomMapa-11_order-gsAs_gsA" \
     .format(MAXLAT, MINLAT, MAXLONG, MINLONG)
 TELEGRAM_API = "https://api.telegram.org/bot{}/sendMessage?chat_id={}&parse_mode=Markdown&text={}"
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 def fetch_prices():
     r = requests.get(URL)
@@ -64,8 +70,8 @@ def get_msg():
 
 
 if __name__ == "__main__":
-    H = 7
-    M = 30
+    H = 8
+    M = 0
     # "Half-ass" solution made by:
     # https://stackoverflow.com/questions/2031111/in-python-how-can-i-put-a-thread-to-sleep-until-a-specific-time
 
@@ -74,8 +80,11 @@ if __name__ == "__main__":
         future = datetime.datetime(t.year, t.month, t.day, H, M)
         if t.hour >= H:
             future += datetime.timedelta(days=1)
-        print(future, t)
-        print((future-t).total_seconds())
+
+        logger.info("Time sleep: {} seconds.".format((future-t).total_seconds()))
+        logger.info("Today: {}.".format(t))
+        logger.info("Future: {}.".format(future))
+
         time.sleep((future-t).total_seconds())
 
         requests.get(TELEGRAM_API.format(
