@@ -4,6 +4,7 @@ models/
 gpt2_gentext_*
 logs/
 .vscode
+telegram-spootnik_bot/fuel_fetch/prices.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
