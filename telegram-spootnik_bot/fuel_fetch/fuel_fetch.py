@@ -64,15 +64,18 @@ def get_msg():
 
 
 if __name__ == "__main__":
+    H = 7
+    M = 30
     # "Half-ass" solution made by:
     # https://stackoverflow.com/questions/2031111/in-python-how-can-i-put-a-thread-to-sleep-until-a-specific-time
 
     for _ in range(0, 365):
         t = datetime.datetime.today()
-        future = datetime.datetime(t.year, t.month, t.day, 8, 30)
-        if t.hour >= 8:
+        future = datetime.datetime(t.year, t.month, t.day, H, M)
+        if t.hour >= H:
             future += datetime.timedelta(days=1)
-
+        print(future, t)
+        print((future-t).total_seconds())
         time.sleep((future-t).total_seconds())
 
         requests.get(TELEGRAM_API.format(
