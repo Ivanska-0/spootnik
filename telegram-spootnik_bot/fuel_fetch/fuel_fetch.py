@@ -19,6 +19,7 @@ MAXLAT = os.getenv("MAXLAT")
 MINLAT = os.getenv("MINLAT")
 MAXLONG = os.getenv("MAXLONG")
 MINLONG = os.getenv("MINLONG")
+SPEC = os.getenv("SPEC")
 
 URL = "https://www.komparing.com/es/gasolina/include/process-xml_maxLat{}_minLat{}_maxLong-{}_minLong-{}_zoomMapa-11_order-gsAs_gsA" \
     .format(MAXLAT, MINLAT, MAXLONG, MINLONG)
@@ -39,12 +40,13 @@ def fetch_prices():
         (df.localidad == LOC1) |
         (df.localidad == LOC2)
     )
-
+    specific_df = df[df.rotulo == SPEC][col_filters].tail(1)
     df = df[col_filters]
     df = df[loc_filters]
     df = df[(df.gasolina_95 != 0) &
             (df.gasoleo_A_normal != 0)]
     df = df.sort_values(by="gasolina_95").head(3)
+    df = pd.concat([df, specific_df], ignore_index=True)
 
     prices_df = pd.read_csv(os.path.join(
         pathlib.Path(__file__).parent.resolve(), "prices.csv"))
@@ -57,7 +59,7 @@ def fetch_prices():
 def get_msg():
     prices = fetch_prices()
     ret = "¡Buenos días! Hoy los combustibles más baratos están en:\n\n"
-    for p in prices:
+    for p in prices[:-1]:
         if p[0] == LOC1:
             p[0] = LOCC
         ret += "{}, en {}. ({})\n".format(
@@ -66,11 +68,22 @@ def get_msg():
         ret += "Gasóleo: {} €/L\nGasolina: {} €/L\n\n".format(
             p[4], p[3]
         )
+    last_p = prices[-1]
+    ret += "Y los precios en {} de {} son:\n\n".format(
+        last_p[2], last_p[0]
+    )
+    ret += "Gasóleo: {} €/L\nGasolina: {} €/L\n\n".format(
+        last_p[4], last_p[3]
+    )
+    ret += "Gasóleo (8% DTO.): {} €/L\nGasolina (8% DTO.): {} €/L".format(
+        round(last_p[4] - last_p[4]*0.08, 3),
+        round(last_p[3] - last_p[3]*0.08, 3)
+    )
     return ret
 
 
 if __name__ == "__main__":
-    H = 8
+    H = 7
     M = 0
     # "Half-ass" solution made by:
     # https://stackoverflow.com/questions/2031111/in-python-how-can-i-put-a-thread-to-sleep-until-a-specific-time
