@@ -58,7 +58,7 @@ def fetch_prices():
 
 def get_msg():
     prices = fetch_prices()
-    ret = "¡Buenos días! Hoy los combustibles más baratos están en:\n\n"
+    ret = "Доброе утро! Hoy los combustibles más baratos están en:\n\n"
     for p in prices[:-1]:
         if p[0] == LOC1:
             p[0] = LOCC
